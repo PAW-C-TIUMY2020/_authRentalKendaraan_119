@@ -212,9 +212,7 @@ namespace RentalKendaraan_20180140119.Models
             {
                 entity.HasKey(e => e.IdPengembalian);
 
-                entity.Property(e => e.IdPengembalian)
-                    .HasColumnName("ID_Pengembalian")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.IdPengembalian).HasColumnName("ID_Pengembalian");
 
                 entity.Property(e => e.IdKondisi).HasColumnName("ID_Kondisi");
 
@@ -223,8 +221,18 @@ namespace RentalKendaraan_20180140119.Models
                 entity.Property(e => e.TglPengembalian)
                     .HasColumnName("Tgl_Pengembalian")
                     .HasColumnType("datetime");
-                //step 27
+
+                entity.HasOne(d => d.IdKondisiNavigation)
+                    .WithMany(p => p.Pengembalian)
+                    .HasForeignKey(d => d.IdKondisi)
+                    .HasConstraintName("FK_Pengembalian_Kondisi_Kendaraan");
+
+                entity.HasOne(d => d.IdPeminjamanNavigation)
+                    .WithMany(p => p.Pengembalian)
+                    .HasForeignKey(d => d.IdPeminjaman)
+                    .HasConstraintName("FK_Pengembalian_Peminjaman");
             });
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
